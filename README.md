@@ -6,21 +6,21 @@ Logs a user in.
 
 ### Payload
 
-`
+```
 {
     "email":"test@test.com",
     "password":"test1234!"
 }
-`
+```
 
 ### Response
 
-`
+```
 {
     "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY1NzQ0MDY2MiwianRpIjoiOWUwZjAwOWY4Y2QxNDEyZDk0MmQxNWI0Yzg1ODFlN2EiLCJ1c2VyX2lkIjo2fQ.JeCzttgiSQdB84Z_Fhw8-p2lCrgtXIQzLjF0NnazVKA",
     "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU3MzU0NTYyLCJqdGkiOiI0NjNlNjNlMDIyNGM0MzM0OWNkNzI4MDdlMDc1ZDE0MSIsInVzZXJfaWQiOjZ9.rEoohBTZuvXwObYiz3paX0u4Io90aKaQGxIwz7ICzuA"
 }
-`
+```
 
 
 ## Signup:  `http://localhost:8000/auth/register`
@@ -31,18 +31,18 @@ Sign up
 
 Role is either IN (INSTITUTION) or EU (END USER).
 
-`
+```
 {
     "email":"test@test.com",
     "display_name": "OCBC Bank",
     "password":"test1234!",
     "role":"IN"
 }
-`
+```
 
 ### Response
 
-`
+```
 {
     "id": 3,
     "email": "test@test.com",
@@ -50,7 +50,7 @@ Role is either IN (INSTITUTION) or EU (END USER).
     "role": "IN",
     "created_at": "2022-07-09T08:59:22.259095Z"
 }
-`
+```
 
 
 
@@ -66,7 +66,7 @@ Nothing
 
 ### Response
 
-`
+```
 [
     {
         "id": 2,
@@ -87,7 +87,7 @@ Nothing
         "user_from": 1
     }
 ]
-`
+```
 
 
 ## List all institutions: `http://localhost:8000/register/listinstitutions`
@@ -100,6 +100,7 @@ Nothing
 
 ### Response
 
+```
 [
     {
         "id": 1,
@@ -108,7 +109,7 @@ Nothing
         "role": "IN"
     }
 ]
-
+```
 
 
 ## Add an institution: `http://localhost:8000/register/addinstitution`
@@ -117,11 +118,11 @@ Add an institution to the list of institutions that the end user wishes to recei
 
 ### Payload
 
-`
+```
 {
     "institution_id":1
 }
-`
+```
 
 ## Response
 
@@ -139,13 +140,13 @@ Send a verification code to an end user.
 
 ### Payload
 
-`
+```
 {
     "verification_code":"420",
     "time_sent":"2022-07-09T15:15:15",
     "user_to":1
 }
-`
+```
 
 ### Response
 
@@ -158,7 +159,7 @@ Lists all the end users that are registered with this institution.
 
 ### Response
 
-`
+```
 [
     {
         "id": 2,
@@ -167,5 +168,5 @@ Lists all the end users that are registered with this institution.
         "role": "EU"
     }
 ]
-`
+```
 
