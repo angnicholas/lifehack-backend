@@ -19,22 +19,26 @@ from authapi.permissions import IsInstitution, IsInstitutionOrEndUser
 
 class RegisterView(APIView):
     
-    class Register(generics.CreateAPIView):
+    class AddInstitution(generics.CreateAPIView):
         permission_classes = [IsInstitution] # To review
         #serializer_class = VerifierSerializerCreate
 
         def post(self, request, format=None):  
             user = User.objects.get(pk=request.user.pk)
-            institution_user = request.data['institution_user_id']
+            
+            institution_user_id = request.data.get('institution_id', False)
+            if not institution_user_id:
+                return Response('No Institution ID specified!', status=status.HTTP_400_BAD_REQUEST)
+            try:
+                institution_user = User.objects.get(pk=institution_user_id)
+            except:
+                return Response(
+                    f'Institution with id {institution_user_id} is not found.', 
+                    status=status.HTTP_404_NOT_FOUND
+                )
 
-
-            serializer = self.get_serializer(data=request.data)
-            if serializer.is_valid():
-                svd = serializer.validated_data
-                svd['user_from'] = User.objects.get(pk=request.user.pk)
-                #Verifier.objects.create(**svd)
-                return Response('Created.', status=status.HTTP_200_OK)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            user.registered_institutions.add(institution_user)
+            return Response('Institution Added successfully.', status=status.HTTP_200_OK)
             
 
     class ListInstitutions(generics.ListAPIView):
