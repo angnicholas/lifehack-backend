@@ -44,6 +44,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     REQUIRED_FIELDS = ['role']
 
+    def can_send_to_user(self, other_user):
+        if self.role != 'IN':
+            return False
+        users_under_self = User.objects.filter(registered_institutions=self)
+        if other_user in users_under_self:
+            return True
+        return False
+
     def __str__(self):
         return self.email
 

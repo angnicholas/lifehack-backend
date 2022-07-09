@@ -28,7 +28,14 @@ class VerifierView(APIView):
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid():
                 svd = serializer.validated_data
-                svd['user_from'] = User.objects.get(pk=request.user.pk)
+                user_to_send_to = User.objects.get(pk=svd['user_to'].pk)
+                me = User.objects.get(pk=request.user.pk)
+
+                if not me.can_send_to_user(user_to_send_to):
+                    return Response('Can only send a code to an end user that is registered!')
+
+                svd['user_from'] = me
+
                 Verifier.objects.create(**svd)
                 return Response('Created.', status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
