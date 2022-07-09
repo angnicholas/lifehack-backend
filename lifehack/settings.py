@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'djoser',
     'rest_framework',
     'verifier',
+    'register'
 ]
 
 AUTH_USER_MODEL = 'authapi.User'

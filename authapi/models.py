@@ -37,6 +37,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     display_name = models.CharField(max_length=MAX_LENGTH)
 
     role = models.CharField(choices=ROLE_LIST, max_length=MAX_LENGTH, default="NONE")
+    registered_institutions = models.ManyToManyField("self", blank=True)
     created_at = models.DateTimeField(default=timezone.now)
 
     objects = UserManager()
@@ -44,7 +45,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['role']
 
     def __str__(self):
-        return self.username
+        return self.email
 
     def __repr__(self):
-        return f"{self.username!r}, {self.role}"
+        return f"{self.email!r}, {self.role}"

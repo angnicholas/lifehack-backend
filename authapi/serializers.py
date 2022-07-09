@@ -1,5 +1,6 @@
 from djoser.serializers import UserCreateSerializer
 from django.contrib.auth import get_user_model
+from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 User = get_user_model() #Retrieve custom user model
@@ -7,8 +8,15 @@ User = get_user_model() #Retrieve custom user model
 class UserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
-        fields = ('id', 'username', 'password', 'role', 'created_at')
+        fields = '__all__'
+        fields = ('id', 'email', 'display_name', 'password', 'role', 'created_at')
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'display_name', 'role')
+
+        
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
