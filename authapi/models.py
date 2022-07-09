@@ -9,27 +9,32 @@ MAX_LENGTH = 255
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, username, password=None, **extra_fields):
+    def create_user(self, email, display_name, password=None, **extra_fields):
         """Create user by username and password"""
-        if not username:
-            raise ValueError('User must have an username!')
-        user = self.model(username = username, **extra_fields)
+        if not email:
+            raise ValueError('User must have an email!')
+        user = self.model(
+            email=email,
+            display_name=display_name,
+            **extra_fields
+        )
         user.set_password(password)
         user.save(using=self.db)
         return user
 
-    def create_superuser(self, username, password, role):
-        """Create superuser by username and password"""
-        user = self.create_user(username=username, password=password, role=role)
-        user.is_superuser = True
-        user.save(using=self.db)
-        return user
+    # def create_superuser(self, username, password, role):
+    #     """Create superuser by username and password"""
+    #     user = self.create_user(username=username, password=password, role=role)
+    #     user.is_superuser = True
+    #     user.save(using=self.db)
+    #     return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom User model"""
-    USERNAME_FIELD = 'username'
-    username = models.CharField(max_length=MAX_LENGTH, unique = True)
+    USERNAME_FIELD = 'email'
+    email = models.CharField(max_length=MAX_LENGTH, unique = True)
+    display_name = models.CharField(max_length=MAX_LENGTH)
 
     role = models.CharField(choices=ROLE_LIST, max_length=MAX_LENGTH, default="NONE")
     created_at = models.DateTimeField(default=timezone.now)
