@@ -42,4 +42,4 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.username
 
     def __repr__(self):
-        return f"{self.username!r}, {self.is_staff!r}, {self.is_active!r}, {self.role}"
+        return f"{self.username!r}, {self.role}"
