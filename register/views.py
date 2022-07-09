@@ -15,12 +15,12 @@ from collections import OrderedDict
 
 from authapi.models import User
 from authapi.serializers import UserSerializer
-from authapi.permissions import IsInstitution, IsInstitutionOrEndUser
+from authapi.permissions import IsInstitution, IsEndUser, IsInstitutionOrEndUser
 
 class RegisterView(APIView):
     
     class AddInstitution(generics.CreateAPIView):
-        permission_classes = [IsInstitution] # To review
+        permission_classes = [IsEndUser] # To review
         #serializer_class = VerifierSerializerCreate
 
         def post(self, request, format=None):  
@@ -51,5 +51,17 @@ class RegisterView(APIView):
             serializer = self.get_serializer(queryset, many=True)
             
             return Response(serializer.data)
+
+
+    class ListEndUsers(generics.ListAPIView):
+        permission_classes = [IsInstitution] # To review
+        serializer_class = UserSerializer
+
+        def get(self, request, format=None):
+            institution_user = User.objects.get(pk=request.user.pk)
+            queryset = User.objects.filter(registered_institutions=institution_user)
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
+
 
 
