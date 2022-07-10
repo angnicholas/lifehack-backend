@@ -39,9 +39,47 @@ class RegisterView(APIView):
 
             user.registered_institutions.add(institution_user)
             return Response('Institution Added successfully.', status=status.HTTP_200_OK)
+
+    
+    class DeleteInstitution(generics.DestroyAPIView):
+        permission_classes = [IsEndUser] # To review
+
+        def delete(self, request, format=None):  
+
+            user = User.objects.get(pk=request.user.pk)
+            
+            institution_user_id = request.data.get('institution_id', False)
+            if not institution_user_id:
+                return Response('No Institution ID specified!', status=status.HTTP_400_BAD_REQUEST)
+            try:
+                institution_user = User.objects.get(pk=institution_user_id)
+            except:
+                return Response(
+                    f'Institution with id {institution_user_id} is not found.', 
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            user.registered_institutions.remove(institution_user)
+            return Response('Institution Removed successfully.', status=status.HTTP_200_OK)
+
+
+    class ListMyInstitutions(generics.ListAPIView):
+        permission_classes = [IsInstitutionOrEndUser] # To review
+        serializer_class = UserSerializer
+        
+        def get(self, request, format=None):
+            
+            user = User.objects.get(pk=request.user.pk)
+            queryset = user.registered_institutions.all()
+
+            #queryset = User.objects.filter(role='IN', )
+            serializer = self.get_serializer(queryset, many=True)
+            
+            return Response(serializer.data)
+    
             
 
-    class ListInstitutions(generics.ListAPIView):
+    class ListAllInstitutions(generics.ListAPIView):
         permission_classes = [IsInstitutionOrEndUser] # To review
         serializer_class = UserSerializer
         

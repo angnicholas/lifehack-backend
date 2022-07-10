@@ -1,10 +1,12 @@
-# AUTH ENDPOINTS
+Backend code for the running of Autentida app.
+
+# API Reference
 
 ## Login: `http://localhost:8000/auth/jwt/login`
 
-Logs a user in.
+Logs a user in with their email and password. Returns refresh and access tokens along with the user role and 
 
-### Payload
+### Sample Payload
 
 ```
 {
@@ -13,23 +15,23 @@ Logs a user in.
 }
 ```
 
-### Response
+### Sample Response
 
 ```
 {
-    "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY1NzQ0MDY2MiwianRpIjoiOWUwZjAwOWY4Y2QxNDEyZDk0MmQxNWI0Yzg1ODFlN2EiLCJ1c2VyX2lkIjo2fQ.JeCzttgiSQdB84Z_Fhw8-p2lCrgtXIQzLjF0NnazVKA",
-    "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU3MzU0NTYyLCJqdGkiOiI0NjNlNjNlMDIyNGM0MzM0OWNkNzI4MDdlMDc1ZDE0MSIsInVzZXJfaWQiOjZ9.rEoohBTZuvXwObYiz3paX0u4Io90aKaQGxIwz7ICzuA"
+    "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY1NzUwODQwMywianRpIjoiN2EzNTdlYjllYTZhNDljNmFjOGRiNzUwZDU2MjMzNzIiLCJ1c2VyX2lkIjoyfQ.J_NhSYnh9Nd0vwK4xf3mUmh5FyY8jcwtPzG1MORcHh8",
+    "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU3NDIyMzAzLCJqdGkiOiI3MGQ3NWE5NDI0ZTM0NDkzODQ4ODVlNjBhMGJlNDhiOSIsInVzZXJfaWQiOjJ9.yeFlMs2hb1hGME7guYnxream_Ds1Gzp11_ZmMFiKEWQ",
+    "role": "EU",
+    "id": 2
 }
 ```
 
 
 ## Signup:  `http://localhost:8000/auth/register`
 
-Sign up
+Signs a new user up using their credentials. Specify role as either 'IN' (for an institution), or 'EU' (for an end user).
 
-### Payload
-
-Role is either IN (INSTITUTION) or EU (END USER).
+### Sample Payload
 
 ```
 {
@@ -40,7 +42,7 @@ Role is either IN (INSTITUTION) or EU (END USER).
 }
 ```
 
-### Response
+### Sample Response
 
 ```
 {
@@ -52,53 +54,81 @@ Role is either IN (INSTITUTION) or EU (END USER).
 }
 ```
 
+# API Endpoints for End Users
 
+## List all Verification Codes as an End User:  `http://localhost:8000/verifier`
 
-# END USER ENDPOINTS
+Lists all the codes sent from institutions to a particular user. 
 
-## List all Codes:  `http://localhost:8000/verifier`
+Each entry consists of the verification code sent by the institution, a timestamp which represents the time when the SMS/Email notification was supposedly sent, and the display name of the institution which the code originated from.
 
-Lists all the codes sent from institutions.
+### Sample Payload
 
-### Payload
+Nothing. User identity is determined based on the JSON Web Token which is sent to the backend.
 
-Nothing
-
-### Response
+### Sample Response
 
 ```
 [
     {
         "id": 2,
-        "verification_code": "420",
+        "verification_code": "660",
         "time_sent": "2022-07-09T15:15:15Z",
         "create_at": "2022-07-09T09:17:50.379490Z",
         "update_at": "2022-07-09T09:17:50.379497Z",
         "user_to": 2,
-        "user_from": 1
+        "user_from": "OCBC Bank"
     },
     {
         "id": 3,
-        "verification_code": "420",
+        "verification_code": "12454",
         "time_sent": "2022-07-09T15:15:15Z",
         "create_at": "2022-07-09T09:22:48.213024Z",
         "update_at": "2022-07-09T09:22:48.213034Z",
         "user_to": 2,
-        "user_from": 1
+        "user_from": "OCBC Bank"
     }
 ]
 ```
 
 
-## List all institutions: `http://localhost:8000/register/listinstitutions`
+## List all institutions: `http://localhost:8000/register/listallinstitutions`
 
-Lists all the institutions that this end user registered themselves with.
+Lists all the institutions that exist in the system, which the user can choose to register themselves with.
 
-### Payload
+### Sample Payload
 
-Nothing
+Nothing.
 
-### Response
+### Sample Response
+
+```
+[
+    {
+        "id": 1,
+        "email": "institution1@test.com",
+        "display_name": "Institution 1",
+        "role": "IN"
+    },
+    {
+        "id": 2,
+        "email": "institution1@test.com",
+        "display_name": "Institution 2",
+        "role": "IN"
+    }
+]
+```
+
+
+## List my institutions: `http://localhost:8000/register/listmyinstitutions`
+
+Lists all the institutions which the given user is currently registered with.
+
+### Sample Payload
+
+Nothing. User identity is determined by JSON Web Token.
+
+### Sample Response
 
 ```
 [
@@ -116,7 +146,7 @@ Nothing
 
 Add an institution to the list of institutions that the end user wishes to receive codes from.
 
-### Payload
+### Sample Payload
 
 ```
 {
@@ -124,40 +154,69 @@ Add an institution to the list of institutions that the end user wishes to recei
 }
 ```
 
-## Response
+## Response Codes
 
-"Institution Added successfully."
+`HTTP_200`: Institution Added Successfully.
 
-or 400, I think, double check the code 
+`HTTP_400`: Institution ID is specified in the wrong format or is absent.
+
+`HTTP_404`: Institution with that ID is not found.
 
 
+## Remove an institution: `http://localhost:8000/register/deleteinstitution`
 
-# INSTITUTION ENDPOINTS
+Remove an institution to the list of institutions that the end user wishes to receive codes from.
+
+### Sample Payload
+
+```
+{
+    "institution_id":1
+}
+```
+
+## Response Codes
+
+`HTTP_200`: Institution Removed Successfully.
+
+`HTTP_400`: Institution ID is specified in the wrong format or is absent.
+
+`HTTP_404`: Institution with that ID is not found.
+
+
+# API Endpoints for Institutions
 
 ## Send a code:  `http://localhost:8000/verifier/send`
 
 Send a verification code to an end user.
 
-### Payload
+User Identity is determined by JSON Web Token. Verification Code is generated on the side of the Institution, and the Time Sent will be based on the time that the institution sends their SMS/Email. User_to will be the user_id of the end user which the institution wants to send the verification code to.
+
+### Sample Payload
 
 ```
 {
-    "verification_code":"420",
+    "verification_code":"28",
     "time_sent":"2022-07-09T15:15:15",
     "user_to":1
 }
 ```
 
-### Response
+### Response Codes
 
-400 or 200 I think, check the code to double-check
+`HTTP_400`: Bad request - request did not match correct format
+`HTTP_200`: Code sent successfully.
 
 
 ## List end users: `http://localhost:8000/register/listendusers`
 
 Lists all the end users that are registered with this institution.
 
-### Response
+### Payload
+
+None. Institution Identity is based on their JSON Web Token.
+
+### Sample Response
 
 ```
 [

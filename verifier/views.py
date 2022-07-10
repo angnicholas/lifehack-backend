@@ -50,7 +50,13 @@ class VerifierView(APIView):
             user = User.objects.get(pk=request.user.pk)
             queryset = Verifier.objects.filter(user_to=user)
             serializer = self.get_serializer(queryset, many=True)
+
+            new_data = []
+            for i in serializer.data:
+                print(i['user_from'])
+                i['user_from'] = User.objects.get(pk=i['user_from']).display_name
+                new_data.append(i)
             
-            return Response(serializer.data)
+            return Response(new_data)
 
 
