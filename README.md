@@ -1,6 +1,6 @@
 # AUTH ENDPOINTS
 
-## Login: `http://localhost:8000/auth/jwt/create`
+## Login: `http://localhost:8000/auth/jwt/login`
 
 Logs a user in.
 

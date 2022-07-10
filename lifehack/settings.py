@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'djoser',
     'rest_framework',
     'verifier',
-    'register'
+    'register',
+    'corsheaders'
 ]
 
 AUTH_USER_MODEL = 'authapi.User'
@@ -64,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 	# 'corsheaders.middleware.CorsMiddleware'
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'lifehack.urls'
@@ -148,3 +150,10 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'access_token_lifetime': timedelta(minutes=20),
 }
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+)

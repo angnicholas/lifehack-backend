@@ -17,3 +17,17 @@ class Command(BaseCommand):
             role='EU', 
             password='pbkdf2_sha256$320000$fzVxGO5DcNsQhOG3XMXUas$f/pSnQxfGi1Ld5ij+0DhyVFZDJIP6Ui/ZvomRLIYZok='
         )
+
+        User.objects.create(
+            email='institution2@test.com',
+            display_name='Institution 2',
+            role='IN', 
+            password='pbkdf2_sha256$320000$fzVxGO5DcNsQhOG3XMXUas$f/pSnQxfGi1Ld5ij+0DhyVFZDJIP6Ui/ZvomRLIYZok='
+        )
+
+        User.objects.create(
+            email='user2@test.com',
+            display_name='User 2',
+            role='EU', 
+            password='pbkdf2_sha256$320000$fzVxGO5DcNsQhOG3XMXUas$f/pSnQxfGi1Ld5ij+0DhyVFZDJIP6Ui/ZvomRLIYZok='
+        )
